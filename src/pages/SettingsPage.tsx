@@ -1,6 +1,7 @@
 // 设置页
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import BottomNav from '../components/BottomNav';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
@@ -68,6 +69,9 @@ export default function SettingsPage() {
           </button>
         </section>
       </main>
+
+      {/* 底部导航 */}
+      <BottomNav />
     </div>
   );
 }

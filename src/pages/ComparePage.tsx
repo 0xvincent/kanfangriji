@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
 import { sortVisits } from '../utils/scoring';
 import type { Visit } from '../types';
+import BottomNav from '../components/BottomNav';
 
 export default function ComparePage() {
   const navigate = useNavigate();
@@ -250,6 +251,9 @@ export default function ComparePage() {
           </svg>
         </button>
       </nav>
+
+      {/* 底部导航 */}
+      <BottomNav />
     </div>
   );
 }

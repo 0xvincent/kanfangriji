@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
+import BottomNav from '../components/BottomNav';
 
 export default function WeightsPage() {
   const navigate = useNavigate();
@@ -261,6 +262,9 @@ export default function WeightsPage() {
           </div>
         </div>
       )}
+
+      {/* 底部导航 */}
+      <BottomNav />
     </div>
   );
 }
