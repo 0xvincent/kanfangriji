@@ -61,9 +61,9 @@ export default function VisitDetailPage() {
 
   return (
     <div className="min-h-screen bg-white pb-24">
-      {/* 顶部导航 - 只保留返回 */}
-      <header className="h-12 px-l flex items-center justify-between border-b border-border-line">
-        <button onClick={() => navigate('/')} className="text-primary">返回</button>
+      {/* 顶部导航 - 只保留返回，固定在顶部 */}
+      <header className="sticky top-0 z-10 h-12 px-l flex items-center justify-between border-b border-border-line bg-white">
+        <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
         <h1 className="text-section-title">房源详情</h1>
         <div className="w-12" /> {/* 占位符，保持居中 */}
       </header>

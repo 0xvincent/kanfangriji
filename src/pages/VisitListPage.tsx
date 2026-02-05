@@ -130,103 +130,139 @@ export default function VisitListPage() {
             <p className="text-gray-300 text-sm text-center mt-1">点击右下角按钮开始记录</p>
           </div>
         ) : (
-          /* 房源列表 - Notion风格卡片 */
-          <div className="space-y-3 pt-2">
+          /* 房源列表 - 大卡片设计（类似贝壳/自如）*/
+          <div className="space-y-4 pt-3">
             {sortedVisits.map((visit) => (
               <div
                 key={visit.id}
                 onClick={() => navigate(`/detail/${visit.id}`)}
-                className="flex gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
+                className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm active:scale-[0.98] transition-transform cursor-pointer"
               >
-                {/* 缩略图 */}
-                <div className="w-16 h-16 rounded-lg flex-shrink-0 overflow-hidden">
-                  {thumbnails[visit.id] ? (
-                    <img
-                      src={thumbnails[visit.id]}
-                      alt={visit.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
-                      <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                {/* 照片横向滚动区（显示最多5张照片）*/}
+                {visit.photos.length > 0 ? (
+                  <div className="relative">
+                    {/* 横向滚动照片 */}
+                    <div className="flex gap-1 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+                      {visit.photos.slice(0, 5).map((photo, index) => (
+                        <div key={photo.id} className="flex-shrink-0 w-[45%] h-48 snap-start first:ml-0">
+                          {thumbnails[visit.id] && index === 0 ? (
+                            <img
+                              src={thumbnails[visit.id]}
+                              alt={`${visit.title} - ${index + 1}`}
+                              className="w-full h-full object-cover rounded-lg"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg flex items-center justify-center">
+                              <svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* 照片数量标签 */}
+                    <div className="absolute top-3 right-3 bg-black/60 text-white text-xs px-2 py-1 rounded-full backdrop-blur-sm">
+                      <svg className="w-3 h-3 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
                       </svg>
+                      {visit.photos.length}
                     </div>
-                  )}
-                </div>
-
-                {/* 信息 */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900 truncate">
-                        {visit.title}
-                      </h3>
-                      <p className="text-xs text-gray-500 mt-0.5 truncate">
-                        {visit.community}
-                      </p>
-                    </div>
-                    {/* 总分 */}
+                    
+                    {/* 总分角标 */}
                     {visit.computed.totalScore !== undefined && (
-                      <div className="text-right flex-shrink-0 ml-2">
-                        <span className="text-lg font-semibold text-gray-900">
-                          {visit.computed.totalScore}
-                        </span>
-                        <span className="text-xs text-gray-400">分</span>
+                      <div className="absolute top-3 left-3 bg-blue-500 text-white px-3 py-1.5 rounded-full font-semibold text-sm shadow-lg">
+                        {visit.computed.totalScore}分
                       </div>
                     )}
                   </div>
+                ) : (
+                  /* 无照片时的占位 */
+                  <div className="relative h-48 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center rounded-t-2xl">
+                    <svg className="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    {visit.computed.totalScore !== undefined && (
+                      <div className="absolute top-3 left-3 bg-blue-500 text-white px-3 py-1.5 rounded-full font-semibold text-sm shadow-lg">
+                        {visit.computed.totalScore}分
+                      </div>
+                    )}
+                  </div>
+                )}
 
-                  {/* 关键信息 */}
-                  <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500 mb-2">
+                {/* 信息区域 */}
+                <div className="p-4">
+                  {/* 标题和小区 */}
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1 line-clamp-1">
+                    {visit.title}
+                  </h3>
+                  <p className="text-sm text-gray-500 mb-3 line-clamp-1">
+                    {visit.community}
+                  </p>
+
+                  {/* 关键信息 - 大字体显示 */}
+                  <div className="grid grid-cols-2 gap-3 mb-3">
                     {visit.rent && (
-                      <span className="flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                        </svg>
-                        ¥{visit.rent}/月
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <svg className="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500">租金</div>
+                          <div className="text-base font-semibold text-gray-900">¥{visit.rent}</div>
+                        </div>
+                      </div>
                     )}
                     {visit.values?.commute_min && (
-                      <span className="flex items-center gap-1">
-                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        通勤{visit.values.commute_min}分
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-500">通勤</div>
+                          <div className="text-base font-semibold text-gray-900">{visit.values.commute_min}分</div>
+                        </div>
+                      </div>
                     )}
-                    <span className="flex items-center gap-1 text-gray-400">
-                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {new Date(visit.createdAt).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })}
-                    </span>
                   </div>
 
                   {/* 标签 */}
                   {visit.computed.breakdown && (() => {
                     const tags = generateTags(visit.computed.breakdown);
                     return tags.positive.length > 0 || tags.risk.length > 0 ? (
-                      <div className="flex flex-wrap gap-1.5 mt-2">
-                        {tags.positive.slice(0, 2).map((tag, i) => (
+                      <div className="flex flex-wrap gap-2">
+                        {tags.positive.slice(0, 3).map((tag, i) => (
                           <span
                             key={`pos-${i}`}
-                            className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-xs rounded-full"
+                            className="px-2.5 py-1 bg-emerald-50 text-emerald-600 text-xs font-medium rounded-lg"
                           >
-                            {tag}
+                            ✓ {tag}
                           </span>
                         ))}
                         {tags.risk.slice(0, 2).map((tag, i) => (
                           <span
                             key={`risk-${i}`}
-                            className="px-2 py-0.5 bg-red-50 text-red-500 text-xs rounded-full"
+                            className="px-2.5 py-1 bg-red-50 text-red-500 text-xs font-medium rounded-lg"
                           >
-                            {tag}
+                            ! {tag}
                           </span>
                         ))}
                       </div>
                     ) : null;
                   })()}
+
+                  {/* 时间 */}
+                  <div className="flex items-center gap-1 text-xs text-gray-400 mt-3 pt-3 border-t border-gray-100">
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {new Date(visit.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </div>
                 </div>
               </div>
             ))}
@@ -245,7 +281,8 @@ export default function VisitListPage() {
       </button>
 
       {/* Notion风格底部导航 - 只有图标 */}
-      <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white flex items-center justify-around px-6">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 pb-safe">
+        <div className="h-16 flex items-center justify-around px-6">
         <button className="p-3 rounded-xl">
           <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -275,6 +312,7 @@ export default function VisitListPage() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
           </svg>
         </button>
+        </div>
       </nav>
     </div>
   );

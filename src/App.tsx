@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useAppStore } from './stores/appStore';
 
 function App() {
   const { initialize, isLoading, error, clearError } = useAppStore();
   const initialized = useRef(false);
+  const location = useLocation();
 
   useEffect(() => {
     // 只初始化一次
@@ -13,6 +14,11 @@ function App() {
       initialize();
     }
   }, [initialize]);
+
+  // 路由变化时滚动到顶部（防止跳动）
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   // 首次加载时显示 loading
   if (isLoading && !initialized.current) {
