@@ -7,16 +7,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        // 基于视觉设计规范的色彩系统
-        primary: '#2F80ED',
-        'text-main': '#222222',
-        'text-secondary': '#666666',
-        'text-hint': '#999999',
-        'border-line': '#EAEAEA',
-        'tag-positive-bg': '#EAF6EF',
-        'tag-positive-text': '#2E7D32',
-        'tag-risk-bg': '#FDECEA',
-        'tag-risk-text': '#C62828',
+        // Notion 风格配色系统
+        primary: '#2383E2',  // Notion 蓝色
+        'text-main': '#37352F',  // Notion 深灰（主文字）
+        'text-secondary': '#787774',  // Notion 中灰（次要文字）
+        'text-hint': '#9B9A97',  // Notion 浅灰（提示文字）
+        'border-line': '#E9E9E7',  // Notion 边框
+        'bg-hover': '#F7F6F3',  // Notion 悬停背景
+        'bg-page': '#FFFFFF',  // 页面背景
+        'tag-positive-bg': '#DDEDEA',  // Notion 绿色标签背景
+        'tag-positive-text': '#0F7B6C',  // Notion 绿色标签文字
+        'tag-risk-bg': '#FFE2DD',  // Notion 红色标签背景
+        'tag-risk-text': '#D44C47',  // Notion 红色标签文字
       },
       fontSize: {
         'page-title': ['22px', { lineHeight: '1.4', fontWeight: '600' }],

@@ -127,7 +127,7 @@ export default function VoiceRecorderComponent({ memos, onMemosChange }: VoiceRe
   return (
     <div className="space-y-m">
       {/* 录音控制 */}
-      <div className="bg-gray-50 rounded-lg p-m">
+      <div className="bg-hover rounded-lg p-m">
         {!isRecording ? (
           <button
             onClick={startRecording}

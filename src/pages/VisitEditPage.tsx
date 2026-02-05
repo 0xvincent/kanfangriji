@@ -101,8 +101,8 @@ export default function VisitEditPage() {
   return (
     <div className="min-h-screen bg-white pb-24">
       {/* 顶部导航 - 只保留标题 */}
-      <header className="h-12 px-4 flex items-center justify-center border-b border-gray-100">
-        <h1 className="text-base font-medium text-gray-900">{id ? '编辑房源' : '新建房源'}</h1>
+      <header className="h-12 px-4 flex items-center justify-center border-b border-line">
+        <h1 className="text-base font-medium text-main">{id ? '编辑房源' : '新建房源'}</h1>
       </header>
 
       <main className="px-4 py-6 space-y-8">
@@ -200,7 +200,7 @@ export default function VisitEditPage() {
               value={quickNote}
               onChange={(e) => setQuickNote(e.target.value)}
               placeholder="一句话：最喜欢/最担心的合1点"
-              className="w-full min-h-[100px] bg-gray-50 rounded-lg p-m text-body outline-none focus:ring-2 focus:ring-primary"
+              className="w-full min-h-[100px] bg-hover rounded-lg p-m text-body outline-none focus:ring-2 focus:ring-primary"
             />
           ) : (
             <VoiceRecorderComponent
@@ -234,7 +234,7 @@ export default function VisitEditPage() {
                     <p className="text-sm text-gray-700 mb-2">
                       还有 <span className="font-semibold text-blue-600">{dimensions.length - visibleDimensions.length}</span> 个维度未启用
                     </p>
-                    <p className="text-xs text-gray-500 mb-3">
+                    <p className="text-xs text-secondary mb-3">
                       启用后，所有房源都将同步添加该维度，方便对比
                     </p>
                     <button
@@ -255,10 +255,10 @@ export default function VisitEditPage() {
       </main>
 
       {/* 底部固定按钮栏 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 flex gap-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-line px-4 py-3 flex gap-3">
         <button
           onClick={() => navigate('/')}
-          className="flex-1 h-11 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 active:scale-98 transition-all"
+          className="flex-1 h-11 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-hover active:scale-98 transition-all"
         >
           返回
         </button>

@@ -127,7 +127,7 @@ export default function VisitDetailPage() {
           
           {/* 缩略图列表 */}
           {visit.photos.length > 1 && (
-            <div className="flex gap-2 p-2 overflow-x-auto bg-gray-50">
+            <div className="flex gap-2 p-2 overflow-x-auto bg-hover">
               {visit.photos.map((photo, index) => (
                 <button
                   key={photo.id}
@@ -313,7 +313,7 @@ export default function VisitDetailPage() {
                 {visit.computed.breakdown.contributions.slice(0, 5).map((item, index) => (
                   <div
                     key={item.dimensionId}
-                    className="flex items-center justify-between p-m bg-gray-50 rounded-lg"
+                    className="flex items-center justify-between p-m bg-hover rounded-lg"
                   >
                     <div className="flex items-center gap-m">
                       <span className="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full text-xs">
@@ -341,7 +341,7 @@ export default function VisitDetailPage() {
           <section>
             <h3 className="text-section-title mb-m">速记</h3>
             {visit.quickNoteText && (
-              <div className="bg-gray-50 rounded-lg p-m text-body mb-m">
+              <div className="bg-hover rounded-lg p-m text-body mb-m">
                 {visit.quickNoteText}
               </div>
             )}
@@ -355,7 +355,7 @@ export default function VisitDetailPage() {
       </main>
       
       {/* 底部固定按钮栏 */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-line px-4 py-3 safe-area-bottom">
         <button
           onClick={() => navigate(`/edit/${id}`)}
           className="w-full h-11 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 active:scale-98 transition-all shadow-sm"

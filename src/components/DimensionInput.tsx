@@ -36,7 +36,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
                   className={`h-10 rounded-lg text-base font-medium transition-all ${
                     ratingValue === score
                       ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:scale-95'
+                      : 'bg-gray-100 text-secondary hover:bg-gray-200 active:scale-95'
                   }`}
                 >
                   {score}
@@ -45,7 +45,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
             </div>
             
             {helpText && (
-              <div className="text-sm text-gray-500 leading-relaxed">
+              <div className="text-sm text-secondary leading-relaxed">
                 {helpText}
               </div>
             )}
@@ -64,7 +64,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
                 className={`flex-1 py-3 rounded-lg border text-base font-medium transition-all ${
                   boolValue === true
                     ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
-                    : 'border-border-line text-text-secondary hover:bg-gray-50 active:scale-95'
+                    : 'border-border-line text-text-secondary hover:bg-hover active:scale-95'
                 }`}
               >
                 是
@@ -74,7 +74,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
                 className={`flex-1 py-3 rounded-lg border text-base font-medium transition-all ${
                   boolValue === false
                     ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
-                    : 'border-border-line text-text-secondary hover:bg-gray-50 active:scale-95'
+                    : 'border-border-line text-text-secondary hover:bg-hover active:scale-95'
                 }`}
               >
                 否
@@ -84,7 +84,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
                 className={`flex-1 py-3 rounded-lg border text-base font-medium transition-all ${
                   boolValue === null
                     ? 'bg-gray-200 border-gray-300 text-gray-700'
-                    : 'border-border-line text-text-hint hover:bg-gray-50 active:scale-95'
+                    : 'border-border-line text-text-hint hover:bg-hover active:scale-95'
                 }`}
               >
                 不清楚
@@ -134,7 +134,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
                 className={`py-3 px-3 rounded-lg border text-sm font-medium transition-all ${
                   selectValue === null || selectValue === '' || selectValue === '不清楚'
                     ? 'bg-gray-200 border-gray-300 text-gray-700'
-                    : 'border-border-line text-text-secondary hover:bg-gray-50'
+                    : 'border-border-line text-text-secondary hover:bg-hover'
                 }`}
               >
                 不清楚
@@ -148,7 +148,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
                   className={`py-3 px-3 rounded-lg border text-sm font-medium transition-all ${
                     selectValue === opt.value
                       ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
-                      : 'border-border-line text-text-secondary hover:bg-gray-50'
+                      : 'border-border-line text-text-secondary hover:bg-hover'
                   }`}
                 >
                   {opt.label}

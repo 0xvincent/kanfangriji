@@ -217,25 +217,25 @@ export default function WeightsPage() {
           <div className="grid grid-cols-2 gap-s">
             <button
               onClick={() => applyPreset('balanced')}
-              className="py-m border border-border-line rounded-lg text-body hover:bg-gray-50"
+              className="py-m border border-border-line rounded-lg text-body hover:bg-hover"
             >
               ⚖️ 均衡
             </button>
             <button
               onClick={() => applyPreset('commute')}
-              className="py-m border border-border-line rounded-lg text-body hover:bg-gray-50"
+              className="py-m border border-border-line rounded-lg text-body hover:bg-hover"
             >
               🚇 通勤更重
             </button>
             <button
               onClick={() => applyPreset('cost')}
-              className="py-m border border-border-line rounded-lg text-body hover:bg-gray-50"
+              className="py-m border border-border-line rounded-lg text-body hover:bg-hover"
             >
               💰 省钱更重
             </button>
             <button
               onClick={() => applyPreset('comfort')}
-              className="py-m border border-border-line rounded-lg text-body hover:bg-gray-50"
+              className="py-m border border-border-line rounded-lg text-body hover:bg-hover"
             >
               ☀️ 舒适更重
             </button>
@@ -245,11 +245,11 @@ export default function WeightsPage() {
       
       {/* 底部固定按钮栏 */}
       {hasChanges && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area-bottom">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-line px-4 py-3 safe-area-bottom">
           <div className="flex gap-3">
             <button
               onClick={handleReset}
-              className="flex-1 h-11 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 active:scale-98 transition-all"
+              className="flex-1 h-11 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-hover active:scale-98 transition-all"
             >
               重置
             </button>

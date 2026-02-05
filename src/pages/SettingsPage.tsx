@@ -55,15 +55,15 @@ export default function SettingsPage() {
           <h2 className="text-section-title mb-m">数据管理</h2>
           <button
             onClick={() => navigate('/export')}
-            className="w-full flex items-center justify-between py-4 border-b border-border-line text-body hover:bg-gray-50 transition-colors rounded-lg px-4"
+            className="w-full flex items-center justify-between py-4 border-b border-border-line text-body hover:bg-hover transition-colors rounded-lg px-4"
           >
             <div className="flex items-center gap-3">
-              <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
               </svg>
               <span>导出/备份</span>
             </div>
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 text-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>

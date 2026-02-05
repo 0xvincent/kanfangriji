@@ -97,13 +97,13 @@ export default function PhotoSection({ category, label, photos, onPhotosChange }
       <div className="flex gap-s">
         <button
           onClick={() => handleAddPhoto('camera')}
-          className="flex-1 text-primary text-secondary py-s border border-border-line rounded-lg hover:bg-gray-50"
+          className="flex-1 text-primary text-secondary py-s border border-border-line rounded-lg hover:bg-hover"
         >
           📷 拍照
         </button>
         <button
           onClick={() => handleAddPhoto('gallery')}
-          className="flex-1 text-primary text-secondary py-s border border-border-line rounded-lg hover:bg-gray-50"
+          className="flex-1 text-primary text-secondary py-s border border-border-line rounded-lg hover:bg-hover"
         >
           🖼️ 相册
         </button>

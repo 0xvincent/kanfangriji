@@ -54,20 +54,20 @@ export default function ComparePage() {
   return (
     <div className="min-h-screen bg-white pb-20">
       {/* Notion风格顶部 */}
-      <header className="sticky top-0 z-10 bg-white border-b border-gray-100">
+      <header className="sticky top-0 z-10 bg-white border-b border-line">
         {/* 安全区占位 */}
         <div className="safe-top-spacer" />
         {/* 内容区（固定44px） */}
         <div className="h-11 px-4 flex items-center justify-between">
           <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
-          <h1 className="text-lg font-medium text-gray-900">对比</h1>
+          <h1 className="text-lg font-medium text-main">对比</h1>
           <div className="flex items-center gap-3">
           {/* 切换显示范围 */}
           <button
             onClick={() => setShowAll(!showAll)}
             className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
               showAll 
-                ? 'bg-gray-100 text-gray-600' 
+                ? 'bg-gray-100 text-secondary' 
                 : 'bg-blue-50 text-blue-600'
             }`}
           >
@@ -84,7 +84,7 @@ export default function ComparePage() {
             <svg className="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
             </svg>
-            <p className="text-gray-400 text-center">
+            <p className="text-hint text-center">
               {showAll ? '还没有房源记录' : '还没有候选房源'}
             </p>
             <p className="text-gray-300 text-sm text-center mt-1">
@@ -103,7 +103,7 @@ export default function ComparePage() {
           /* 对比表格 */
           <div className="space-y-4 pt-2">
             {/* 提示信息 */}
-            <div className="text-xs text-gray-400 flex items-center gap-2">
+            <div className="text-xs text-hint flex items-center gap-2">
               <span>共 {sortedVisits.length} 套</span>
               {selectedIds.size > 0 && (
                 <span className="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">
@@ -119,7 +119,7 @@ export default function ComparePage() {
                 className={`rounded-xl border transition-all ${
                   selectedIds.has(visit.id)
                     ? 'border-blue-300 bg-blue-50/30'
-                    : 'border-gray-100 hover:border-gray-200'
+                    : 'border-line hover:border-gray-200'
                 }`}
               >
                 {/* 卡片头部 */}
@@ -132,15 +132,15 @@ export default function ComparePage() {
                       {/* 排名 */}
                       <div className={`w-7 h-7 rounded-full flex items-center justify-center text-sm font-medium ${
                         index === 0 ? 'bg-yellow-100 text-yellow-700' :
-                        index === 1 ? 'bg-gray-100 text-gray-600' :
+                        index === 1 ? 'bg-gray-100 text-secondary' :
                         index === 2 ? 'bg-orange-100 text-orange-700' :
-                        'bg-gray-50 text-gray-400'
+                        'bg-hover text-hint'
                       }`}>
                         {index + 1}
                       </div>
                       <div>
-                        <h3 className="text-sm font-medium text-gray-900">{visit.title}</h3>
-                        <p className="text-xs text-gray-400 mt-0.5">
+                        <h3 className="text-sm font-medium text-main">{visit.title}</h3>
+                        <p className="text-xs text-hint mt-0.5">
                           {visit.community}
                           {visit.rent && ` · ¥${visit.rent}`}
                         </p>
@@ -149,10 +149,10 @@ export default function ComparePage() {
                     
                     {/* 总分 */}
                     <div className="text-right">
-                      <span className="text-2xl font-semibold text-gray-900">
+                      <span className="text-2xl font-semibold text-main">
                         {visit.computed.totalScore || '--'}
                       </span>
-                      <span className="text-xs text-gray-400 ml-0.5">分</span>
+                      <span className="text-xs text-hint ml-0.5">分</span>
                     </div>
                   </div>
 
@@ -161,7 +161,7 @@ export default function ComparePage() {
                     <div className="space-y-2">
                       {getTopDimensions(visit).map((item) => (
                         <div key={item.dimensionId} className="flex items-center gap-2">
-                          <span className="text-xs text-gray-500 w-16 truncate">
+                          <span className="text-xs text-secondary w-16 truncate">
                             {item.dimensionName}
                           </span>
                           <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -170,7 +170,7 @@ export default function ComparePage() {
                               style={{ width: `${item.score}%` }}
                             />
                           </div>
-                          <span className="text-xs text-gray-400 w-8 text-right">
+                          <span className="text-xs text-hint w-8 text-right">
                             {item.score.toFixed(0)}
                           </span>
                         </div>
@@ -188,7 +188,7 @@ export default function ComparePage() {
                       toggleSelect(visit.id);
                     }}
                     className={`flex items-center gap-1.5 text-sm ${
-                      selectedIds.has(visit.id) ? 'text-blue-600' : 'text-gray-400'
+                      selectedIds.has(visit.id) ? 'text-blue-600' : 'text-hint'
                     }`}
                   >
                     <svg className="w-4 h-4" fill={selectedIds.has(visit.id) ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -204,7 +204,7 @@ export default function ComparePage() {
                       toggleCandidate(visit);
                     }}
                     className={`flex items-center gap-1.5 text-sm ${
-                      visit.status === 'candidate' ? 'text-yellow-600' : 'text-gray-400'
+                      visit.status === 'candidate' ? 'text-yellow-600' : 'text-hint'
                     }`}
                   >
                     <svg className="w-4 h-4" fill={visit.status === 'candidate' ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
@@ -223,30 +223,30 @@ export default function ComparePage() {
       <nav className="fixed bottom-0 left-0 right-0 h-16 bg-white flex items-center justify-around px-6 border-t border-gray-50">
         <button
           onClick={() => navigate('/')}
-          className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="p-3 rounded-xl hover:bg-hover transition-colors"
         >
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
         </button>
         <button className="p-3 rounded-xl">
-          <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </button>
         <button
           onClick={() => navigate('/weights')}
-          className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="p-3 rounded-xl hover:bg-hover transition-colors"
         >
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
           </svg>
         </button>
         <button
           onClick={() => navigate('/dimensions')}
-          className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="p-3 rounded-xl hover:bg-hover transition-colors"
         >
-          <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-6 h-6 text-hint" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
           </svg>
         </button>

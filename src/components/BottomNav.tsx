@@ -8,15 +8,15 @@ export default function BottomNav() {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-10">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-line z-10">
       {/* 图标区（固定52px） */}
       <div className="h-13 flex items-center justify-around px-6">
         <button
           onClick={() => navigate('/')}
-          className={`p-2.5 rounded-xl ${isActive('/') ? '' : 'hover:bg-gray-100 transition-colors'}`}
+          className={`p-2.5 rounded-xl ${isActive('/') ? '' : 'hover:bg-hover transition-colors'}`}
         >
           <svg
-            className={`w-6 h-6 ${isActive('/') ? 'text-gray-900' : 'text-gray-400'}`}
+            className={`w-6 h-6 ${isActive('/') ? 'text-main' : 'text-hint'}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -31,10 +31,10 @@ export default function BottomNav() {
         </button>
         <button
           onClick={() => navigate('/compare')}
-          className={`p-2.5 rounded-xl ${isActive('/compare') ? '' : 'hover:bg-gray-100 transition-colors'}`}
+          className={`p-2.5 rounded-xl ${isActive('/compare') ? '' : 'hover:bg-hover transition-colors'}`}
         >
           <svg
-            className={`w-6 h-6 ${isActive('/compare') ? 'text-gray-900' : 'text-gray-400'}`}
+            className={`w-6 h-6 ${isActive('/compare') ? 'text-main' : 'text-hint'}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -49,10 +49,10 @@ export default function BottomNav() {
         </button>
         <button
           onClick={() => navigate('/weights')}
-          className={`p-2.5 rounded-xl ${isActive('/weights') ? '' : 'hover:bg-gray-100 transition-colors'}`}
+          className={`p-2.5 rounded-xl ${isActive('/weights') ? '' : 'hover:bg-hover transition-colors'}`}
         >
           <svg
-            className={`w-6 h-6 ${isActive('/weights') ? 'text-gray-900' : 'text-gray-400'}`}
+            className={`w-6 h-6 ${isActive('/weights') ? 'text-main' : 'text-hint'}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -67,10 +67,10 @@ export default function BottomNav() {
         </button>
         <button
           onClick={() => navigate('/settings')}
-          className={`p-2.5 rounded-xl ${isActive('/settings') ? '' : 'hover:bg-gray-100 transition-colors'}`}
+          className={`p-2.5 rounded-xl ${isActive('/settings') ? '' : 'hover:bg-hover transition-colors'}`}
         >
           <svg
-            className={`w-6 h-6 ${isActive('/settings') ? 'text-gray-900' : 'text-gray-400'}`}
+            className={`w-6 h-6 ${isActive('/settings') ? 'text-main' : 'text-hint'}`}
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
