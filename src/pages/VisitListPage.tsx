@@ -141,18 +141,18 @@ export default function VisitListPage() {
                 {/* 照片横向滚动区（显示最多5张照片）*/}
                 {visit.photos.length > 0 ? (
                   <div className="relative">
-                    {/* 横向滚动照片 */}
-                    <div className="flex gap-1 overflow-x-auto scrollbar-hide snap-x snap-mandatory">
+                    {/* 横向滚动照片 - 每张32%宽度，一屏显示3张+ */}
+                    <div className="flex gap-2 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-1">
                       {visit.photos.slice(0, 5).map((photo, index) => (
-                        <div key={photo.id} className="flex-shrink-0 w-[45%] h-48 snap-start first:ml-0">
+                        <div key={photo.id} className="flex-shrink-0 w-[32%] h-44 snap-start">
                           {thumbnails[visit.id] && index === 0 ? (
                             <img
                               src={thumbnails[visit.id]}
                               alt={`${visit.title} - ${index + 1}`}
-                              className="w-full h-full object-cover rounded-lg"
+                              className="w-full h-full object-cover rounded-xl"
                             />
                           ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg flex items-center justify-center">
+                            <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-50 rounded-xl flex items-center justify-center">
                               <svg className="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                               </svg>
@@ -179,7 +179,7 @@ export default function VisitListPage() {
                   </div>
                 ) : (
                   /* 无照片时的占位 */
-                  <div className="relative h-48 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center rounded-t-2xl">
+                  <div className="relative h-44 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center rounded-t-2xl">
                     <svg className="w-16 h-16 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
