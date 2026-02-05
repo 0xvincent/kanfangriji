@@ -1,0 +1,11 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="512" height="512" rx="128" fill="#3b82f6"/>
+  
+  <!-- 房子图标 -->
+  <path d="M256 96L128 192V384H192V288H320V384H384V192L256 96Z" fill="white" stroke="white" stroke-width="16" stroke-linejoin="round"/>
+  
+  <!-- 对勾标记 -->
+  <circle cx="384" cy="128" r="48" fill="#10b981"/>
+  <path d="M368 128L378 138L400 116" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
