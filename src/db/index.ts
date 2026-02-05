@@ -1,7 +1,7 @@
 // IndexedDB 数据库配置（使用 Dexie.js）
 
 import Dexie, { type Table } from 'dexie';
-import type { Visit, Dimension, ScoreProfile, Home, Photo, VoiceMemo } from '../types';
+import type { Visit, Dimension, ScoreProfile, Home } from '../types';
 
 export class HouseNotesDB extends Dexie {
   visits!: Table<Visit>;

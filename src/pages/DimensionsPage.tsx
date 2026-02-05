@@ -2,14 +2,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
-import type { Dimension, DimensionType, DimensionGroup } from '../types';
-import { generateId } from '../utils/helpers';
+import type { Dimension, DimensionGroup } from '../types';
 
 export default function DimensionsPage() {
   const navigate = useNavigate();
-  const { dimensions, addDimension, updateDimension } = useAppStore();
+  const { dimensions, updateDimension } = useAppStore();
   const [showNewForm, setShowNewForm] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
 
   // 按分组组织维度
   const groupedDimensions: Record<DimensionGroup, Dimension[]> = {
@@ -34,13 +32,6 @@ export default function DimensionsPage() {
   const handleToggleEnabled = async (dimension: Dimension) => {
     await updateDimension(dimension.id, {
       defaultEnabled: !dimension.defaultEnabled
-    });
-  };
-
-  // 切换默认显示
-  const handleToggleVisible = async (dimension: Dimension) => {
-    await updateDimension(dimension.id, {
-      defaultVisible: !dimension.defaultVisible
     });
   };
   

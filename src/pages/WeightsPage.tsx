@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
-import type { Dimension } from '../types';
 
 export default function WeightsPage() {
   const navigate = useNavigate();

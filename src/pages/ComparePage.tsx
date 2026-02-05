@@ -1,5 +1,5 @@
 // 对比页 - Notion风格
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
 import { sortVisits } from '../utils/scoring';
@@ -7,7 +7,7 @@ import type { Visit } from '../types';
 
 export default function ComparePage() {
   const navigate = useNavigate();
-  const { visits, dimensions, updateVisit } = useAppStore();
+  const { visits, updateVisit } = useAppStore();
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showAll, setShowAll] = useState(false);
 

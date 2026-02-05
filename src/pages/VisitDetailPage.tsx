@@ -6,8 +6,6 @@ import { getPhotoBlob } from '../db/operations';
 import { createPhotoURL } from '../utils/imageProcessor';
 import { generateTags } from '../utils/scoring';
 import { formatDate } from '../utils/helpers';
-import { PHOTO_CATEGORIES } from '../types/dimensions';
-import type { Photo } from '../types';
 
 export default function VisitDetailPage() {
   const navigate = useNavigate();
@@ -40,14 +38,6 @@ export default function VisitDetailPage() {
   if (!visit) {
     return <div>房源不存在</div>;
   }
-
-  // 按类别分组照片
-  const photosByCategory = visit.photos.reduce((acc, photo) => {
-    const category = photo.category || 'other';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(photo);
-    return acc;
-  }, {} as Record<string, Photo[]>);
 
   // 关闭灯箱
   const closeLightbox = () => {

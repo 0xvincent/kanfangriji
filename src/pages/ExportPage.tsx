@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
-import { db } from '../db';
 
 export default function ExportPage() {
   const navigate = useNavigate();
