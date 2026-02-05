@@ -10,12 +10,13 @@ import { formatDate } from '../utils/helpers';
 export default function VisitDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { getVisit } = useAppStore();
+  const { getVisit, deleteVisit } = useAppStore();
   const visit = id ? getVisit(id) : null;
   const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
   const [showBreakdown, setShowBreakdown] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showMenu, setShowMenu] = useState(false);
 
   // 加载所有照片
   useEffect(() => {
@@ -59,9 +60,24 @@ export default function VisitDetailPage() {
     }
   };
 
+  // 删除房源
+  const handleDelete = async () => {
+    if (!id) return;
+    
+    const confirmed = window.confirm('确定要删除这个房源吗？此操作不可恢复！');
+    if (!confirmed) return;
+    
+    try {
+      await deleteVisit(id);
+      navigate('/', { replace: true });
+    } catch (error) {
+      alert('删除失败，请重试');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white pb-24">
-      {/* 顶部导航 - 只保留返回，固定在顶部 */}
+      {/* 顶部导航 */}
       <header className="sticky top-0 z-10 bg-white border-b border-border-line">
         {/* 安全区占位 */}
         <div className="safe-top-spacer" />
@@ -69,7 +85,60 @@ export default function VisitDetailPage() {
         <div className="h-11 px-l flex items-center justify-between">
           <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
           <h1 className="text-section-title">房源详情</h1>
-          <div className="w-12" /> {/* 占位符，保持居中 */}
+          
+          {/* 更多操作菜单 */}
+          <div className="relative">
+            <button 
+              onClick={() => setShowMenu(!showMenu)}
+              className="p-2 hover:bg-hover rounded-lg transition-colors"
+            >
+              <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+              </svg>
+            </button>
+            
+            {/* 下拉菜单 */}
+            {showMenu && (
+              <>
+                {/* 背景遮罩 */}
+                <div 
+                  className="fixed inset-0 z-20" 
+                  onClick={() => setShowMenu(false)}
+                />
+                
+                {/* 菜单内容 */}
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-line py-2 z-30">
+                  <button
+                    onClick={() => {
+                      setShowMenu(false);
+                      navigate(`/edit/${id}`);
+                    }}
+                    className="w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-hover transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    <span className="text-main">编辑房源</span>
+                  </button>
+                  
+                  <div className="h-px bg-line my-1" />
+                  
+                  <button
+                    onClick={() => {
+                      setShowMenu(false);
+                      handleDelete();
+                    }}
+                    className="w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-red-50 transition-colors"
+                  >
+                    <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    <span className="text-red-500 font-medium">删除房源</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
