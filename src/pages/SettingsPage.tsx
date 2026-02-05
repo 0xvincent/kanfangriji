@@ -15,10 +15,15 @@ export default function SettingsPage() {
   
   return (
     <div className="min-h-screen bg-white pb-20">
-      <header className="sticky top-0 z-10 pt-safe h-12 px-l flex items-center justify-between border-b border-border-line bg-white">
-        <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
-        <h1 className="text-section-title">设置</h1>
-        <div className="w-12" />
+      <header className="sticky top-0 z-10 bg-white border-b border-border-line">
+        {/* 安全区占位 */}
+        <div className="safe-top-spacer" />
+        {/* 内容区（固定44px） */}
+        <div className="h-11 px-l flex items-center justify-between">
+          <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
+          <h1 className="text-section-title">设置</h1>
+          <div className="w-12" />
+        </div>
       </header>
       
       <main className="px-l py-xl space-y-xl">

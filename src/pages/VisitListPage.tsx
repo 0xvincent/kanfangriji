@@ -58,11 +58,15 @@ export default function VisitListPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Notion风格顶部导航 - 极简，置顶 + 安全区 */}
-      <header className="sticky top-0 z-10 pt-safe h-14 px-4 flex items-center justify-between border-b border-gray-100 bg-white">
-        <h1 className="text-lg font-medium text-gray-900">看房笔记</h1>
-        <div className="flex items-center gap-3">
-          {/* 排序按钮 */}
+      {/* Notion风格顶部导航 - 极简，置顶 + 安全区，重新设计高度 */}
+      <header className="sticky top-0 z-10 bg-white border-b border-gray-100">
+        {/* 安全区占位 */}
+        <div className="safe-top-spacer" />
+        {/* 内容区（固定44px） */}
+        <div className="h-11 px-4 flex items-center justify-between">
+          <h1 className="text-lg font-medium text-gray-900">看房笔记</h1>
+          <div className="flex items-center gap-3">
+            {/* 排序按钮 */}
           <button
             onClick={() => setShowSortMenu(!showSortMenu)}
             className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -80,6 +84,7 @@ export default function VisitListPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
             </svg>
           </button>
+          </div>
         </div>
       </header>
 
@@ -270,27 +275,29 @@ export default function VisitListPage() {
         )}
       </main>
 
-      {/* Notion风格浮动按钮 - 右下角，在底部导航上方，考虑安全区 */}
+      {/* Notion风格浮动按钮 - 右下角，在底部导航上方，重新计算位置 */}
       <button
         onClick={() => navigate('/edit')}
-        className="fixed right-5 bottom-[calc(4rem+env(safe-area-inset-bottom)+0.5rem)] w-14 h-14 bg-blue-500 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all active:scale-95 z-20"
+        className="fixed right-5 w-14 h-14 bg-blue-500 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all active:scale-95 z-20"
+        style={{ bottom: 'calc(3.25rem + env(safe-area-inset-bottom) + 0.5rem)' }}
       >
         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
         </svg>
       </button>
 
-      {/* Notion风格底部导航 - 只有图标，常驻底部 */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 pb-safe z-10">
-        <div className="h-16 flex items-center justify-around px-6">
-        <button className="p-3 rounded-xl">
+      {/* Notion风格底部导航 - 只有图标，常驻底部，优化高度 */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 z-10">
+        {/* 图标区（固定52px） */}
+        <div className="h-13 flex items-center justify-around px-6">
+        <button className="p-2.5 rounded-xl">
           <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
           </svg>
         </button>
         <button
           onClick={() => navigate('/compare')}
-          className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
         >
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
@@ -298,7 +305,7 @@ export default function VisitListPage() {
         </button>
         <button
           onClick={() => navigate('/weights')}
-          className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
         >
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
@@ -306,7 +313,7 @@ export default function VisitListPage() {
         </button>
         <button
           onClick={() => navigate('/settings')}
-          className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
+          className="p-2.5 rounded-xl hover:bg-gray-100 transition-colors"
         >
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -314,6 +321,8 @@ export default function VisitListPage() {
           </svg>
         </button>
         </div>
+        {/* 安全区占位 */}
+        <div className="safe-bottom-spacer" />
       </nav>
     </div>
   );
