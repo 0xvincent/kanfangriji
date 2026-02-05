@@ -1,36 +1,51 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAppStore } from './stores/appStore';
 
 function App() {
-  const { initialize, isLoading, error } = useAppStore();
+  const { initialize, isLoading, error, clearError } = useAppStore();
+  const initialized = useRef(false);
 
   useEffect(() => {
-    initialize();
+    // 只初始化一次
+    if (!initialized.current) {
+      initialized.current = true;
+      initialize();
+    }
   }, [initialize]);
 
-  if (isLoading) {
+  // 首次加载时显示 loading
+  if (isLoading && !initialized.current) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="text-page-title text-text-secondary mb-m">看房笔记</div>
-          <div className="text-body text-text-hint">加载中...</div>
+          <div className="text-xl font-semibold text-gray-600 mb-3">看房笔记</div>
+          <div className="text-sm text-gray-400">加载中...</div>
         </div>
       </div>
     );
   }
 
+  // 错误页面，提供清除错误的选项
   if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <div className="text-body text-red-500 mb-m">{error}</div>
-          <button
-            onClick={() => window.location.reload()}
-            className="text-primary text-body"
-          >
-            重新加载
-          </button>
+          <div className="text-sm text-red-500 mb-3">{error}</div>
+          <div className="flex gap-4 justify-center">
+            <button
+              onClick={() => clearError()}
+              className="text-blue-500 text-sm"
+            >
+              继续使用
+            </button>
+            <button
+              onClick={() => window.location.reload()}
+              className="text-blue-500 text-sm"
+            >
+              重新加载
+            </button>
+          </div>
         </div>
       </div>
     );

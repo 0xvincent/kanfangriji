@@ -14,27 +14,38 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
   const renderInput = () => {
     switch (type) {
       case 'rating':
-        // 0-10 滑杆
-        const ratingValue = (value as number) || 5;
+        // 0-10 点选按钮（简洁版）
+        const ratingValue = (value as number) ?? null;
+        const scores = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        
         return (
-          <div>
-            <div className="flex justify-between items-center mb-xs">
-              <label className="text-body">{name}</label>
-              <span className="text-secondary">
-                {value !== null && value !== undefined ? ratingValue : '未评分'}
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <label className="text-sm font-medium text-gray-700">{name}</label>
+              <span className="text-xl font-semibold text-blue-500">
+                {ratingValue !== null ? ratingValue : '-'}
               </span>
             </div>
-            <input
-              type="range"
-              min="0"
-              max="10"
-              step="0.5"
-              value={ratingValue}
-              onChange={(e) => onChange(parseFloat(e.target.value))}
-              className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary"
-            />
+            
+            {/* 分数按钮 */}
+            <div className="grid grid-cols-11 gap-1.5">
+              {scores.map((score) => (
+                <button
+                  key={score}
+                  onClick={() => onChange(score)}
+                  className={`h-9 rounded-md text-sm font-medium transition-all ${
+                    ratingValue === score
+                      ? 'bg-blue-500 text-white shadow-sm'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {score}
+                </button>
+              ))}
+            </div>
+            
             {helpText && (
-              <div className="text-secondary text-xs mt-xs text-text-hint whitespace-pre-line">
+              <div className="text-xs text-gray-500 leading-relaxed">
                 {helpText}
               </div>
             )}

@@ -1,7 +1,7 @@
 // 房源列表页 - Notion 风格
 
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppStore } from '../stores/appStore';
 import { getPhotoBlob } from '../db/operations';
 import { createPhotoURL } from '../utils/imageProcessor';
@@ -10,6 +10,7 @@ import type { SortOption } from '../types';
 
 export default function VisitListPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { visits, loadVisits } = useAppStore();
   const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
   const [sortBy, setSortBy] = useState<SortOption>('totalScore');
@@ -19,16 +20,18 @@ export default function VisitListPage() {
   // 排序后的房源列表
   const sortedVisits = sortVisits(visits, sortBy, sortOrder);
 
+  // 每次进入页面时重新加载数据
   useEffect(() => {
+    console.log('VisitListPage mounted or location changed');
     loadVisits();
-  }, [loadVisits]);
+  }, [location.pathname, loadVisits]);
 
-  // 加载缩略图
+  // 加载缩略图（依赖 visits 而不是 sortedVisits）
   useEffect(() => {
     const loadThumbnails = async () => {
       const urls: Record<string, string> = {};
       
-      for (const visit of sortedVisits) {
+      for (const visit of visits) {
         if (visit.photos.length > 0) {
           const firstPhoto = visit.photos[0];
           const blob = await getPhotoBlob(firstPhoto.thumbBlobPath);
@@ -41,10 +44,10 @@ export default function VisitListPage() {
       setThumbnails(urls);
     };
     
-    if (sortedVisits.length > 0) {
+    if (visits.length > 0) {
       loadThumbnails();
     }
-  }, [sortedVisits]);
+  }, [visits]);
 
   const sortOptions = [
     { value: 'totalScore', label: '总分' },
@@ -228,7 +231,7 @@ export default function VisitListPage() {
           className="p-3 rounded-xl hover:bg-gray-100 transition-colors"
         >
           <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
           </svg>
         </button>
         <button

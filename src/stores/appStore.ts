@@ -47,7 +47,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   currentProfile: null,
   home: null,
   isLoading: false,
-  error: null,
+  error: null as string | null,
 
   // 初始化应用
   initialize: async () => {
@@ -86,10 +86,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   loadVisits: async () => {
     try {
       const visits = await db.getAllVisits();
-      set({ visits });
+      set({ visits, error: null });
     } catch (error) {
       console.error('加载房源失败:', error);
-      set({ error: '加载房源列表失败' });
+      // 加载失败不锁死页面
     }
   },
 
@@ -97,11 +97,25 @@ export const useAppStore = create<AppState>((set, get) => ({
   addVisit: async (data) => {
     try {
       const newVisit = await db.createVisit(data);
-      set(state => ({ visits: [...state.visits, newVisit] }));
+      
+      // 计算总分
+      const { dimensions, currentProfile } = get();
+      if (currentProfile) {
+        const breakdown = calculateTotalScore(newVisit, dimensions, currentProfile);
+        await db.updateVisit(newVisit.id, {
+          computed: {
+            totalScore: breakdown.totalScore,
+            breakdown
+          }
+        });
+      }
+      
+      // 重新加载列表
+      await get().loadVisits();
+      console.log('✅ 房源添加成功');
       return newVisit;
     } catch (error) {
-      console.error('添加房源失败:', error);
-      set({ error: '添加房源失败' });
+      console.error('❗️ 添加房源失败:', error);
       throw error;
     }
   },
@@ -124,11 +138,11 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
       }
       
-      // 重新加载列表
+      // 重新加载列表并清除错误状态
       await get().loadVisits();
+      console.log('✅ 房源更新成功');
     } catch (error) {
-      console.error('更新房源失败:', error);
-      set({ error: '更新房源失败' });
+      console.error('❗️ 更新房源失败:', error);
       throw error;
     }
   },
@@ -138,11 +152,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       await db.deleteVisit(id);
       set(state => ({
-        visits: state.visits.filter(v => v.id !== id)
+        visits: state.visits.filter(v => v.id !== id),
+        error: null
       }));
     } catch (error) {
       console.error('删除房源失败:', error);
-      set({ error: '删除房源失败' });
       throw error;
     }
   },
@@ -159,7 +173,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       set({ dimensions });
     } catch (error) {
       console.error('加载维度失败:', error);
-      set({ error: '加载维度列表失败' });
     }
   },
 
@@ -170,7 +183,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       set(state => ({ dimensions: [...state.dimensions, dimension] }));
     } catch (error) {
       console.error('添加维度失败:', error);
-      set({ error: '添加维度失败' });
       throw error;
     }
   },
@@ -186,7 +198,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       }));
     } catch (error) {
       console.error('更新维度失败:', error);
-      set({ error: '更新维度失败' });
       throw error;
     }
   },
@@ -201,7 +212,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       }
     } catch (error) {
       console.error('加载权重方案失败:', error);
-      set({ error: '加载权重方案失败' });
     }
   },
 
@@ -228,7 +238,6 @@ export const useAppStore = create<AppState>((set, get) => ({
       }
     } catch (error) {
       console.error('更新权重方案失败:', error);
-      set({ error: '更新权重方案失败' });
       throw error;
     }
   },
