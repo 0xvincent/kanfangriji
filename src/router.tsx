@@ -10,6 +10,7 @@ import WeightsPage from './pages/WeightsPage';
 import DimensionsPage from './pages/DimensionsPage';
 import SettingsPage from './pages/SettingsPage';
 import ExportPage from './pages/ExportPage';
+import InstallGuidePage from './pages/InstallGuidePage';
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: 'export',
         element: <ExportPage />
+      },
+      {
+        path: 'install',
+        element: <InstallGuidePage />
       }
     ]
   }
