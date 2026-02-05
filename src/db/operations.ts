@@ -8,8 +8,29 @@ import { generateId } from '../utils/helpers';
 // 数据库版本号（更新维度时递增）
 const DB_VERSION = 3;
 
+// 请求持久化存储权限（防止数据丢失）
+async function requestPersistentStorage() {
+  if (navigator.storage && navigator.storage.persist) {
+    const isPersisted = await navigator.storage.persisted();
+    
+    if (!isPersisted) {
+      const result = await navigator.storage.persist();
+      if (result) {
+        console.log('✅ 持久化存储已启用，数据不会丢失');
+      } else {
+        console.warn('⚠️ 未能启用持久化存储，数据可能被清理');
+      }
+    } else {
+      console.log('✅ 已启用持久化存储');
+    }
+  }
+}
+
 // ============ 初始化数据库 ============
 export async function initializeDB() {
+  // 第一步：请求持久化存储
+  await requestPersistentStorage();
+  
   const homeCount = await db.home.count();
   
   if (homeCount === 0) {

@@ -59,7 +59,7 @@ export default function VisitListPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Notion风格顶部导航 - 极简 */}
-      <header className="h-14 px-4 flex items-center justify-between">
+      <header className="h-14 px-4 flex items-center justify-between border-b border-gray-100">
         <h1 className="text-lg font-medium text-gray-900">看房笔记</h1>
         <div className="flex items-center gap-3">
           {/* 排序按钮 */}
