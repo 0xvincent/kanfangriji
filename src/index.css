@@ -14,9 +14,28 @@
     background-color: #FFFFFF;
     color: #222222;
     min-height: 100vh;
+    /* PWA 安全区域适配 */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 
   * {
     box-sizing: border-box;
+  }
+}
+
+/* 安全区域工具类 */
+@layer utilities {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-inset {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }

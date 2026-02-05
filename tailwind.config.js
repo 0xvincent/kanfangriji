@@ -19,11 +19,11 @@ export default {
         'tag-risk-text': '#C62828',
       },
       fontSize: {
-        'page-title': ['20px', { lineHeight: '1.4', fontWeight: '600' }],
-        'section-title': ['16px', { lineHeight: '1.4', fontWeight: '600' }],
-        'body': ['14px', { lineHeight: '1.5', fontWeight: '400' }],
-        'secondary': ['12px', { lineHeight: '1.5', fontWeight: '400' }],
-        'score-large': ['22px', { lineHeight: '1.2', fontWeight: '600' }],
+        'page-title': ['22px', { lineHeight: '1.4', fontWeight: '600' }],
+        'section-title': ['18px', { lineHeight: '1.4', fontWeight: '600' }],
+        'body': ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+        'secondary': ['14px', { lineHeight: '1.5', fontWeight: '400' }],
+        'score-large': ['24px', { lineHeight: '1.2', fontWeight: '600' }],
       },
       spacing: {
         'xs': '4px',

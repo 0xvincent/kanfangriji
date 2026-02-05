@@ -21,22 +21,22 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
         return (
           <div className="space-y-3">
             <div className="flex justify-between items-center">
-              <label className="text-sm font-medium text-gray-700">{name}</label>
-              <span className="text-xl font-semibold text-blue-500">
+              <label className="text-base font-medium text-gray-700">{name}</label>
+              <span className="text-2xl font-semibold text-blue-500">
                 {ratingValue !== null ? ratingValue : '-'}
               </span>
             </div>
             
             {/* 分数按钮 */}
-            <div className="grid grid-cols-11 gap-1.5">
+            <div className="grid grid-cols-11 gap-2">
               {scores.map((score) => (
                 <button
                   key={score}
                   onClick={() => onChange(score)}
-                  className={`h-9 rounded-md text-sm font-medium transition-all ${
+                  className={`h-10 rounded-lg text-base font-medium transition-all ${
                     ratingValue === score
                       ? 'bg-blue-500 text-white shadow-sm'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200 active:scale-95'
                   }`}
                 >
                   {score}
@@ -45,7 +45,7 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
             </div>
             
             {helpText && (
-              <div className="text-xs text-gray-500 leading-relaxed">
+              <div className="text-sm text-gray-500 leading-relaxed">
                 {helpText}
               </div>
             )}
@@ -57,41 +57,41 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
         const boolValue = value;
         return (
           <div>
-            <label className="text-body block mb-s">{name}</label>
-            <div className="flex gap-s">
+            <label className="text-body block mb-m font-medium">{name}</label>
+            <div className="flex gap-2">
               <button
                 onClick={() => onChange(true)}
-                className={`flex-1 py-s rounded-lg border ${
+                className={`flex-1 py-3 rounded-lg border text-base font-medium transition-all ${
                   boolValue === true
-                    ? 'bg-primary text-white border-primary'
-                    : 'border-border-line text-text-secondary'
+                    ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
+                    : 'border-border-line text-text-secondary hover:bg-gray-50 active:scale-95'
                 }`}
               >
                 是
               </button>
               <button
                 onClick={() => onChange(false)}
-                className={`flex-1 py-s rounded-lg border ${
+                className={`flex-1 py-3 rounded-lg border text-base font-medium transition-all ${
                   boolValue === false
-                    ? 'bg-primary text-white border-primary'
-                    : 'border-border-line text-text-secondary'
+                    ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
+                    : 'border-border-line text-text-secondary hover:bg-gray-50 active:scale-95'
                 }`}
               >
                 否
               </button>
               <button
                 onClick={() => onChange(null)}
-                className={`flex-1 py-s rounded-lg border ${
+                className={`flex-1 py-3 rounded-lg border text-base font-medium transition-all ${
                   boolValue === null
-                    ? 'bg-gray-200 border-gray-300'
-                    : 'border-border-line text-text-hint'
+                    ? 'bg-gray-200 border-gray-300 text-gray-700'
+                    : 'border-border-line text-text-hint hover:bg-gray-50 active:scale-95'
                 }`}
               >
                 不清楚
               </button>
             </div>
             {helpText && (
-              <div className="text-secondary text-xs mt-s text-text-hint">
+              <div className="text-secondary text-sm mt-m text-text-hint leading-relaxed">
                 {helpText}
               </div>
             )}
@@ -102,19 +102,19 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
         // 数字输入
         return (
           <div>
-            <label className="text-body block mb-xs">{name}</label>
-            <div className="flex items-center gap-s">
+            <label className="text-body block mb-m font-medium">{name}</label>
+            <div className="flex items-center gap-m">
               <input
                 type="number"
                 value={(value as number) || ''}
                 onChange={(e) => onChange(e.target.value ? parseFloat(e.target.value) : null)}
                 placeholder="请输入"
-                className="flex-1 border-b border-border-line py-s text-body focus:border-primary outline-none"
+                className="flex-1 border-b-2 border-border-line py-3 text-base focus:border-blue-500 outline-none"
               />
-              {unit && <span className="text-secondary">{unit}</span>}
+              {unit && <span className="text-base text-text-secondary">{unit}</span>}
             </div>
             {helpText && (
-              <div className="text-secondary text-xs mt-s text-text-hint">
+              <div className="text-secondary text-sm mt-m text-text-hint leading-relaxed">
                 {helpText}
               </div>
             )}
@@ -122,24 +122,41 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
         );
 
       case 'select':
-        // 下拉选择
+        // 按钮组选择（一次点击）
+        const selectValue = value as string;
         return (
           <div>
-            <label className="text-body block mb-xs">{name}</label>
-            <select
-              value={(value as string) || ''}
-              onChange={(e) => onChange(e.target.value || null)}
-              className="w-full border border-border-line rounded-lg px-m py-s text-body focus:border-primary outline-none"
-            >
-              <option value="">请选择</option>
+            <label className="text-body block mb-m font-medium">{name}</label>
+            <div className="grid grid-cols-2 gap-2">
+              {/* 不清楚选项 */}
+              <button
+                onClick={() => onChange(null)}
+                className={`py-3 px-3 rounded-lg border text-sm font-medium transition-all ${
+                  selectValue === null || selectValue === '' || selectValue === '不清楚'
+                    ? 'bg-gray-200 border-gray-300 text-gray-700'
+                    : 'border-border-line text-text-secondary hover:bg-gray-50'
+                }`}
+              >
+                不清楚
+              </button>
+              
+              {/* 其他选项 */}
               {options?.map((opt) => (
-                <option key={opt.value} value={opt.value}>
+                <button
+                  key={opt.value}
+                  onClick={() => onChange(opt.value)}
+                  className={`py-3 px-3 rounded-lg border text-sm font-medium transition-all ${
+                    selectValue === opt.value
+                      ? 'bg-blue-500 text-white border-blue-500 shadow-sm'
+                      : 'border-border-line text-text-secondary hover:bg-gray-50'
+                  }`}
+                >
                   {opt.label}
-                </option>
+                </button>
               ))}
-            </select>
+            </div>
             {helpText && (
-              <div className="text-secondary text-xs mt-s text-text-hint">
+              <div className="text-secondary text-xs mt-m text-text-hint leading-relaxed">
                 {helpText}
               </div>
             )}
@@ -150,16 +167,16 @@ export default function DimensionInput({ dimension, value, onChange }: Dimension
         // 文本输入
         return (
           <div>
-            <label className="text-body block mb-xs">{name}</label>
+            <label className="text-body block mb-m font-medium">{name}</label>
             <input
               type="text"
               value={(value as string) || ''}
               onChange={(e) => onChange(e.target.value || null)}
               placeholder="请输入"
-              className="w-full border-b border-border-line py-s text-body focus:border-primary outline-none"
+              className="w-full border-b-2 border-border-line py-3 text-base focus:border-blue-500 outline-none"
             />
             {helpText && (
-              <div className="text-secondary text-xs mt-s text-text-hint">
+              <div className="text-secondary text-sm mt-m text-text-hint leading-relaxed">
                 {helpText}
               </div>
             )}
