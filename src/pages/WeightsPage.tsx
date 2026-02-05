@@ -121,7 +121,7 @@ export default function WeightsPage() {
   
   return (
     <div className="min-h-screen bg-white pb-24">
-      <header className="sticky top-0 z-10 h-12 px-l flex items-center justify-between border-b border-border-line bg-white">
+      <header className="sticky top-0 z-10 pt-safe h-12 px-l flex items-center justify-between border-b border-border-line bg-white">
         <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
         <h1 className="text-section-title">权重设置</h1>
         <div className="w-12" /> {/* 占位符 */}

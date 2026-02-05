@@ -14,9 +14,7 @@
     background-color: #FFFFFF;
     color: #222222;
     min-height: 100vh;
-    /* PWA 安全区域适配 */
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
+    /* PWA 安全区域适配已移至各页面 header */
   }
 
   * {
@@ -37,6 +35,10 @@
   .safe-area-inset {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
   }
   
   .pb-safe {

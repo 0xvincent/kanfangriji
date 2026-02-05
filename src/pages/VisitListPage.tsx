@@ -58,8 +58,8 @@ export default function VisitListPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Notion风格顶部导航 - 极简 */}
-      <header className="h-14 px-4 flex items-center justify-between border-b border-gray-100">
+      {/* Notion风格顶部导航 - 极简，置顶 + 安全区 */}
+      <header className="sticky top-0 z-10 pt-safe h-14 px-4 flex items-center justify-between border-b border-gray-100 bg-white">
         <h1 className="text-lg font-medium text-gray-900">看房笔记</h1>
         <div className="flex items-center gap-3">
           {/* 排序按钮 */}
@@ -270,10 +270,10 @@ export default function VisitListPage() {
         )}
       </main>
 
-      {/* Notion风格浮动按钮 - 右下角，在底部导航上方 */}
+      {/* Notion风格浮动按钮 - 右下角，在底部导航上方，考虑安全区 */}
       <button
         onClick={() => navigate('/edit')}
-        className="fixed right-5 bottom-20 w-14 h-14 bg-blue-500 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all active:scale-95 z-20"
+        className="fixed right-5 bottom-[calc(4rem+env(safe-area-inset-bottom)+0.5rem)] w-14 h-14 bg-blue-500 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all active:scale-95 z-20"
       >
         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

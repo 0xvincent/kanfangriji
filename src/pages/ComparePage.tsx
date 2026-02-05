@@ -53,7 +53,7 @@ export default function ComparePage() {
   return (
     <div className="min-h-screen bg-white pb-20">
       {/* Notion风格顶部 */}
-      <header className="h-14 px-4 flex items-center justify-between sticky top-0 bg-white z-10 border-b border-gray-100">
+      <header className="sticky top-0 z-10 pt-safe h-14 px-4 flex items-center justify-between bg-white border-b border-gray-100">
         <button onClick={() => navigate('/')} className="text-primary font-medium">← 返回</button>
         <h1 className="text-lg font-medium text-gray-900">对比</h1>
         <div className="flex items-center gap-3">
