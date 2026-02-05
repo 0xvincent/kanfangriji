@@ -45,24 +45,22 @@ export default function DimensionsPage() {
   };
   
   return (
-    <div className="min-h-screen bg-white pb-32">
+    <div className="min-h-screen bg-white pb-20">
       <header className="h-12 px-l flex items-center justify-between border-b border-border-line">
         <button onClick={() => navigate('/')} className="text-primary">返回</button>
         <h1 className="text-section-title">维度管理</h1>
-        <button
-          onClick={() => setShowNewForm(true)}
-          className="text-primary font-semibold"
-        >
-          + 新建
-        </button>
+        <div className="w-12" /> {/* 占位符 */}
       </header>
 
       <main className="px-l py-xl space-y-xl">
         {/* 提示 */}
         <div className="bg-blue-50 border-l-4 border-primary px-m py-m text-body">
-          <p className="text-xs text-text-secondary">
-            • 启用：维度参与总分计算<br/>
-            • 默认显示：在录入页精简组中显示
+          <p className="text-xs text-text-secondary leading-relaxed">
+            <strong>启用开关：</strong><br/>
+            • 打开：该维度会在编辑页面显示，并参与总分计算<br/>
+            • 关闭：不显示也不计分，但数据保留<br/>
+            <br/>
+            <em>权重设置请去「权重配置」页面</em>
           </p>
         </div>
 
@@ -90,19 +88,7 @@ export default function DimensionsPage() {
                       </div>
 
                       <div className="flex gap-m items-center">
-                        {/* 默认显示 */}
-                        <button
-                          onClick={() => handleToggleVisible(dimension)}
-                          className={`px-s py-xs rounded-lg text-xs ${
-                            dimension.defaultVisible
-                              ? 'bg-blue-100 text-blue-700'
-                              : 'bg-gray-100 text-text-hint'
-                          }`}
-                        >
-                          {dimension.defaultVisible ? '显示' : '隐藏'}
-                        </button>
-
-                        {/* 启用/禁用 */}
+                        {/* 启用/禁用开关 */}
                         <button
                           onClick={() => handleToggleEnabled(dimension)}
                           className={`w-12 h-6 rounded-full relative transition-colors ${

@@ -6,45 +6,207 @@ import { getPhotoBlob } from '../db/operations';
 import { createPhotoURL } from '../utils/imageProcessor';
 import { generateTags } from '../utils/scoring';
 import { formatDate } from '../utils/helpers';
+import { PHOTO_CATEGORIES } from '../types/dimensions';
+import type { Photo } from '../types';
 
 export default function VisitDetailPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { getVisit } = useAppStore();
   const visit = id ? getVisit(id) : null;
-  const [coverUrl, setCoverUrl] = useState<string>('');
+  const [photoUrls, setPhotoUrls] = useState<Record<string, string>>({});
   const [showBreakdown, setShowBreakdown] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // 加载封面图
+  // 加载所有照片
   useEffect(() => {
-    const loadCover = async () => {
-      if (visit && visit.photos.length > 0) {
-        const blob = await getPhotoBlob(visit.photos[0].blobPath);
+    const loadPhotos = async () => {
+      if (!visit) return;
+      const urls: Record<string, string> = {};
+      
+      for (const photo of visit.photos) {
+        const blob = await getPhotoBlob(photo.blobPath);
         if (blob) {
-          setCoverUrl(createPhotoURL(blob));
+          urls[photo.id] = createPhotoURL(blob);
         }
       }
+      
+      setPhotoUrls(urls);
     };
-    loadCover();
+    loadPhotos();
   }, [visit]);
 
   if (!visit) {
     return <div>房源不存在</div>;
   }
 
+  // 按类别分组照片
+  const photosByCategory = visit.photos.reduce((acc, photo) => {
+    const category = photo.category || 'other';
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(photo);
+    return acc;
+  }, {} as Record<string, Photo[]>);
+
+  // 关闭灯箱
+  const closeLightbox = () => {
+    setLightboxIndex(null);
+    setCurrentImageIndex(0);
+  };
+
+  // 下一张
+  const nextPhoto = () => {
+    if (currentImageIndex < visit.photos.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+  };
+
+  // 上一张
+  const prevPhoto = () => {
+    if (currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white pb-20">
-      {/* 顶部导航 */}
+    <div className="min-h-screen bg-white pb-24">
+      {/* 顶部导航 - 只保留返回 */}
       <header className="h-12 px-l flex items-center justify-between border-b border-border-line">
         <button onClick={() => navigate('/')} className="text-primary">返回</button>
         <h1 className="text-section-title">房源详情</h1>
-        <button onClick={() => navigate(`/edit/${id}`)} className="text-primary">编辑</button>
+        <div className="w-12" /> {/* 占位符，保持居中 */}
       </header>
 
-      {/* 封面图 */}
-      {coverUrl && (
-        <div className="w-full h-64 bg-gray-200">
-          <img src={coverUrl} alt={visit.community} className="w-full h-full object-cover" />
+      {/* 照片轮播 */}
+      {visit.photos.length > 0 && (
+        <div className="relative">
+          {/* 主图 */}
+          <div className="w-full h-64 bg-gray-100 relative">
+            {photoUrls[visit.photos[currentImageIndex]?.id] ? (
+              <img
+                src={photoUrls[visit.photos[currentImageIndex].id]}
+                alt="房源照片"
+                className="w-full h-full object-cover cursor-pointer"
+                onClick={() => setLightboxIndex(currentImageIndex)}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center">
+                <svg className="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+            )}
+            
+            {/* 左右切换按钮 */}
+            {visit.photos.length > 1 && (
+              <>
+                {currentImageIndex > 0 && (
+                  <button
+                    onClick={prevPhoto}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                )}
+                {currentImageIndex < visit.photos.length - 1 && (
+                  <button
+                    onClick={nextPhoto}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                )}
+              </>
+            )}
+            
+            {/* 照片计数 */}
+            <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded-full">
+              {currentImageIndex + 1} / {visit.photos.length}
+            </div>
+          </div>
+          
+          {/* 缩略图列表 */}
+          {visit.photos.length > 1 && (
+            <div className="flex gap-2 p-2 overflow-x-auto bg-gray-50">
+              {visit.photos.map((photo, index) => (
+                <button
+                  key={photo.id}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 ${
+                    index === currentImageIndex ? 'border-blue-500' : 'border-transparent'
+                  }`}
+                >
+                  {photoUrls[photo.id] ? (
+                    <img
+                      src={photoUrls[photo.id]}
+                      alt={`缩略图 ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 全屏灯箱 */}
+      {lightboxIndex !== null && (
+        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+          {/* 关闭按钮 */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white z-10"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          
+          {/* 当前照片 */}
+          <div className="w-full h-full flex items-center justify-center p-4">
+            {photoUrls[visit.photos[currentImageIndex]?.id] && (
+              <img
+                src={photoUrls[visit.photos[currentImageIndex].id]}
+                alt="全屏查看"
+                className="max-w-full max-h-full object-contain"
+              />
+            )}
+          </div>
+          
+          {/* 左右切换 */}
+          {currentImageIndex > 0 && (
+            <button
+              onClick={prevPhoto}
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+          )}
+          {currentImageIndex < visit.photos.length - 1 && (
+            <button
+              onClick={nextPhoto}
+              className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 rounded-full flex items-center justify-center text-white"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          )}
+          
+          {/* 页码 */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/60 text-white px-4 py-2 rounded-full">
+            {currentImageIndex + 1} / {visit.photos.length}
+          </div>
         </div>
       )}
 
@@ -93,6 +255,22 @@ export default function VisitDetailPage() {
 
           {/* 详细信息 */}
           <div className="space-y-s text-body">
+            {visit.sourceUrl && (
+              <div className="flex justify-between items-center">
+                <span className="text-text-secondary">房源链接</span>
+                <a
+                  href={visit.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-600 flex items-center gap-1 text-sm"
+                >
+                  查看原链接
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+            )}
             {visit.rent && (
               <div className="flex justify-between">
                 <span className="text-text-secondary">租金</span>
@@ -179,17 +357,17 @@ export default function VisitDetailPage() {
             )}
           </section>
         )}
-
-        {/* 照片 */}
-        {visit.photos.length > 0 && (
-          <section>
-            <h3 className="text-section-title mb-m">照片 ({visit.photos.length})</h3>
-            <div className="text-secondary">
-              点击编辑查看所有照片
-            </div>
-          </section>
-        )}
       </main>
+      
+      {/* 底部固定按钮栏 */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area-bottom">
+        <button
+          onClick={() => navigate(`/edit/${id}`)}
+          className="w-full h-11 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 active:scale-98 transition-all shadow-sm"
+        >
+          编辑房源
+        </button>
+      </div>
     </div>
   );
 }

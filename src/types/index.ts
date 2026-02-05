@@ -110,6 +110,7 @@ export interface Visit {
   };
   
   // 基础信息
+  sourceUrl?: string;        // 房源链接（链家、贝壳等）
   rent?: number;             // 租金（元/月）
   deposit?: string;          // 押付方式：押一付一等
   area?: number;             // 面积（㎡）
@@ -160,6 +161,7 @@ export interface Home {
   unitSystem: 'metric' | 'imperial'; // 暂时只用 metric
   scoreProfileId: string;            // 当前使用的权重方案ID
   defaultVisibleDimensions: string[]; // 默认展示维度集合（精简组）
+  dbVersion?: number;                 // 数据库版本号（用于迁移）
 }
 
 // ============ 筛选条件 ============

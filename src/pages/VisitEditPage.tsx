@@ -15,6 +15,7 @@ export default function VisitEditPage() {
   const { getVisit, addVisit, updateVisit, dimensions } = useAppStore();
   
   const [community, setCommunity] = useState('');
+  const [sourceUrl, setSourceUrl] = useState('');
   const [rent, setRent] = useState('');
   const [quickNote, setQuickNote] = useState('');
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -22,14 +23,15 @@ export default function VisitEditPage() {
   const [activeTab, setActiveTab] = useState<'text' | 'voice'>('text');
   const [values, setValues] = useState<Record<string, DimensionValue>>({});
 
-  // 获取默认可见的维度
-  const visibleDimensions = dimensions.filter(d => d.defaultVisible);
+  // 获取启用的维度（启用 = 显示 + 参与计算）
+  const visibleDimensions = dimensions.filter(d => d.defaultEnabled);
 
   useEffect(() => {
     if (id) {
       const visit = getVisit(id);
       if (visit) {
         setCommunity(visit.community);
+        setSourceUrl(visit.sourceUrl || '');
         setRent(visit.rent?.toString() || '');
         setQuickNote(visit.quickNoteText || '');
         setPhotos(visit.photos);
@@ -46,6 +48,7 @@ export default function VisitEditPage() {
     const timer = setTimeout(() => {
       updateVisit(id, {
         community,
+        sourceUrl: sourceUrl || undefined,
         rent: rent ? parseFloat(rent) : undefined,
         quickNoteText: quickNote,
         photos,
@@ -55,13 +58,14 @@ export default function VisitEditPage() {
     }, 300);
     
     return () => clearTimeout(timer);
-  }, [id, community, rent, quickNote, photos, voiceMemos, values, updateVisit]);
+  }, [id, community, sourceUrl, rent, quickNote, photos, voiceMemos, values, updateVisit]);
 
   const handleSave = async () => {
     try {
       if (id) {
         await updateVisit(id, {
           community,
+          sourceUrl: sourceUrl || undefined,
           rent: rent ? parseFloat(rent) : undefined,
           quickNoteText: quickNote,
           photos,
@@ -71,6 +75,7 @@ export default function VisitEditPage() {
       } else {
         await addVisit({
           community,
+          sourceUrl: sourceUrl || undefined,
           rent: rent ? parseFloat(rent) : undefined,
           quickNoteText: quickNote,
           photos,
@@ -115,6 +120,19 @@ export default function VisitEditPage() {
                 onChange={(e) => setCommunity(e.target.value)}
                 placeholder="请输入小区名称或地址"
                 className="w-full border-b border-border-line py-s text-body focus:border-primary outline-none"
+              />
+            </div>
+            
+            <div>
+              <label className="text-secondary text-secondary block mb-xs">
+                房源链接（链家/贝壳等）
+              </label>
+              <input
+                type="url"
+                value={sourceUrl}
+                onChange={(e) => setSourceUrl(e.target.value)}
+                placeholder="https://..."
+                className="w-full border-b border-border-line py-s text-body focus:border-primary outline-none text-sm"
               />
             </div>
             

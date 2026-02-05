@@ -5,32 +5,89 @@ import type { Visit, Dimension, ScoreProfile, Home } from '../types';
 import { DEFAULT_DIMENSIONS, DEFAULT_SCORE_PROFILE } from '../types/dimensions';
 import { generateId } from '../utils/helpers';
 
+// 数据库版本号（更新维度时递增）
+const DB_VERSION = 3;
+
 // ============ 初始化数据库 ============
 export async function initializeDB() {
-  // 检查是否已初始化
   const homeCount = await db.home.count();
-  if (homeCount > 0) return;
+  
+  if (homeCount === 0) {
+    // 首次初始化：创建全部默认数据
+    const defaultHome: Home = {
+      id: 'main',
+      workLocations: [],
+      activeWorkLocationId: '',
+      unitSystem: 'metric',
+      scoreProfileId: 'balanced',
+      defaultVisibleDimensions: DEFAULT_DIMENSIONS
+        .filter(d => d.defaultVisible)
+        .map(d => d.id),
+      dbVersion: DB_VERSION  // 记录版本
+    };
+    await db.home.add(defaultHome);
+    await db.dimensions.bulkAdd(DEFAULT_DIMENSIONS);
+    await db.scoreProfiles.add(DEFAULT_SCORE_PROFILE);
+    console.log('✅ 数据库首次初始化完成');
+  } else {
+    // 检查版本号，如果不匹配则强制更新
+    const home = await db.home.get('main');
+    const currentVersion = home?.dbVersion || 1;
+    
+    if (currentVersion < DB_VERSION) {
+      console.log(`🔄 检测到数据库版本更新 (${currentVersion} → ${DB_VERSION}), 开始更新...`);
+      await updateDimensionsAndProfiles();
+      
+      // 更新版本号
+      await db.home.update('main', { dbVersion: DB_VERSION });
+      console.log(`✅ 数据库已更新到版本 ${DB_VERSION}`);
+    }
+  }
+}
 
-  // 初始化全局配置
-  const defaultHome: Home = {
-    id: 'main',
-    workLocations: [],
-    activeWorkLocationId: '',
-    unitSystem: 'metric',
-    scoreProfileId: 'balanced',
-    defaultVisibleDimensions: DEFAULT_DIMENSIONS
+// 更新维度和权重配置（增量更新）
+async function updateDimensionsAndProfiles() {
+  // 1. 更新维度：添加缺失的维度
+  const existingDimensions = await db.dimensions.toArray();
+  const existingIds = new Set(existingDimensions.map(d => d.id));
+  
+  const newDimensions = DEFAULT_DIMENSIONS.filter(d => !existingIds.has(d.id));
+  if (newDimensions.length > 0) {
+    await db.dimensions.bulkAdd(newDimensions);
+    console.log(`✅ 添加了 ${newDimensions.length} 个新维度:`, newDimensions.map(d => d.name));
+  }
+  
+  // 2. 更新权重配置：合并新的默认权重
+  const balancedProfile = await db.scoreProfiles.get('balanced');
+  if (balancedProfile) {
+    const updatedProfile = {
+      ...balancedProfile,
+      weights: {
+        ...balancedProfile.weights,
+        ...DEFAULT_SCORE_PROFILE.weights  // 合并新权重
+      },
+      enabled: {
+        ...balancedProfile.enabled,
+        ...DEFAULT_SCORE_PROFILE.enabled  // 合并新维度启用状态
+      },
+      updatedAt: Date.now()
+    };
+    await db.scoreProfiles.update('balanced', updatedProfile);
+    console.log('✅ 权重配置已更新');
+  }
+  
+  // 3. 更新 home 的 defaultVisibleDimensions
+  const home = await db.home.get('main');
+  if (home) {
+    const newVisibleDimensions = DEFAULT_DIMENSIONS
       .filter(d => d.defaultVisible)
-      .map(d => d.id)
-  };
-  await db.home.add(defaultHome);
-
-  // 初始化维度库
-  await db.dimensions.bulkAdd(DEFAULT_DIMENSIONS);
-
-  // 初始化默认权重方案
-  await db.scoreProfiles.add(DEFAULT_SCORE_PROFILE);
-
-  console.log('✅ 数据库初始化完成');
+      .map(d => d.id);
+    
+    await db.home.update('main', {
+      defaultVisibleDimensions: newVisibleDimensions
+    });
+    console.log('✅ 默认可见维度已更新');
+  }
 }
 
 // ============ Visit (房源) 操作 ============

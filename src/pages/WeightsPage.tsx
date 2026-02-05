@@ -121,19 +121,11 @@ export default function WeightsPage() {
   };
   
   return (
-    <div className="min-h-screen bg-white pb-32">
+    <div className="min-h-screen bg-white pb-24">
       <header className="h-12 px-l flex items-center justify-between border-b border-border-line">
         <button onClick={() => navigate('/')} className="text-primary">返回</button>
         <h1 className="text-section-title">权重设置</h1>
-        <button 
-          onClick={handleSave}
-          disabled={!hasChanges}
-          className={`font-semibold ${
-            hasChanges ? 'text-primary' : 'text-text-hint'
-          }`}
-        >
-          保存
-        </button>
+        <div className="w-12" /> {/* 占位符 */}
       </header>
 
       <main className="px-l py-xl space-y-xl">
@@ -245,6 +237,26 @@ export default function WeightsPage() {
           </div>
         </section>
       </main>
+      
+      {/* 底部固定按钮栏 */}
+      {hasChanges && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-4 py-3 safe-area-bottom">
+          <div className="flex gap-3">
+            <button
+              onClick={handleReset}
+              className="flex-1 h-11 rounded-lg border border-gray-200 text-gray-700 font-medium hover:bg-gray-50 active:scale-98 transition-all"
+            >
+              重置
+            </button>
+            <button
+              onClick={handleSave}
+              className="flex-1 h-11 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 active:scale-98 transition-all shadow-sm"
+            >
+              保存修改
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

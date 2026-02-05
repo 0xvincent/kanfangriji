@@ -139,7 +139,7 @@ export default function VisitListPage() {
                 className="flex gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors cursor-pointer"
               >
                 {/* 缩略图 */}
-                <div className="w-16 h-16 rounded-lg bg-gray-100 flex-shrink-0 overflow-hidden">
+                <div className="w-16 h-16 rounded-lg flex-shrink-0 overflow-hidden">
                   {thumbnails[visit.id] ? (
                     <img
                       src={thumbnails[visit.id]}
@@ -147,8 +147,8 @@ export default function VisitListPage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <svg className="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                       </svg>
                     </div>
@@ -162,20 +162,45 @@ export default function VisitListPage() {
                       <h3 className="text-sm font-medium text-gray-900 truncate">
                         {visit.title}
                       </h3>
-                      <p className="text-xs text-gray-400 mt-0.5">
+                      <p className="text-xs text-gray-500 mt-0.5 truncate">
                         {visit.community}
-                        {visit.rent && ` · ¥${visit.rent}`}
                       </p>
                     </div>
-                    {/* 分数 */}
-                    {visit.computed.totalScore && (
-                      <div className="text-right">
+                    {/* 总分 */}
+                    {visit.computed.totalScore !== undefined && (
+                      <div className="text-right flex-shrink-0 ml-2">
                         <span className="text-lg font-semibold text-gray-900">
                           {visit.computed.totalScore}
                         </span>
-                        <span className="text-xs text-gray-400 ml-0.5">分</span>
+                        <span className="text-xs text-gray-400">分</span>
                       </div>
                     )}
+                  </div>
+
+                  {/* 关键信息 */}
+                  <div className="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500 mb-2">
+                    {visit.rent && (
+                      <span className="flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                        </svg>
+                        ¥{visit.rent}/月
+                      </span>
+                    )}
+                    {visit.values?.commute_min && (
+                      <span className="flex items-center gap-1">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        通勤{visit.values.commute_min}分
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1 text-gray-400">
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {new Date(visit.createdAt).toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' })}
+                    </span>
                   </div>
 
                   {/* 标签 */}
@@ -191,7 +216,7 @@ export default function VisitListPage() {
                             {tag}
                           </span>
                         ))}
-                        {tags.risk.slice(0, 1).map((tag, i) => (
+                        {tags.risk.slice(0, 2).map((tag, i) => (
                           <span
                             key={`risk-${i}`}
                             className="px-2 py-0.5 bg-red-50 text-red-500 text-xs rounded-full"
